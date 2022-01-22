@@ -25,7 +25,6 @@ public class ConverterXML2JSON implements Converter {
         pat = Pattern.compile("^<(\\w+)\\s((\\w+\\s*=\\s*\"\\w+\\s*\")+)>(.*)</(.*)>$");
         m = pat.matcher(docContent);
         if (m.find()) {
-            System.out.println("m1");
             StringBuilder sb = new StringBuilder();
             String elName = m.group(1);
             String elAtts = m.group(2);
@@ -46,11 +45,10 @@ public class ConverterXML2JSON implements Converter {
         pat = Pattern.compile("^<(\\w+)\\s*((\\w+\\s*=\\s*\"\\w+\"\\s*)+)\\s*/>$");
         m = pat.matcher(docContent);
         if (m.find()) {
-            System.out.println("m2");
             StringBuilder sb = new StringBuilder();
             String elName = m.group(1);
             String elAtts = m.group(2);
-            System.out.println(m.groupCount() + elAtts);
+//            System.out.println(m.groupCount() + elAtts);
 
             Map<String, String> attrs = retreiveXMLAttributes(elAtts);
             attrs.put("#" + elName, null);

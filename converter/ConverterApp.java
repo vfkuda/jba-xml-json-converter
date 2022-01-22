@@ -1,7 +1,6 @@
 package converter;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 
 public class ConverterApp {
 
@@ -17,7 +16,9 @@ public class ConverterApp {
     }
 
     public String convert(InputStream is) throws IOException {
+        is.mark(1);
         DocType kind = detectDocType(is);
+        is.reset();
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         Converter c = createConverter(kind);
         return c.convert(reader);
