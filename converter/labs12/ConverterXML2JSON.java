@@ -1,4 +1,4 @@
-package converter;
+package converter.labs12;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Deprecated
 public class ConverterXML2JSON implements Converter {
 
     public String convert(BufferedReader reader) throws IOException {

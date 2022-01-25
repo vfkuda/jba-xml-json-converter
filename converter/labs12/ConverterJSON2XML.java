@@ -1,47 +1,16 @@
-package converter;
+package converter.labs12;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
 
+@Deprecated
 public class ConverterJSON2XML implements Converter {
     StringBuilder sb;
     int indent = 0;
     private BufferedReader reader;
     private Queue<String> terms = new LinkedList<>();
-    //        String line = reader.readLine();
-//
-//        String retVal = "";
-//        do {
-//            switch (kind) {
-//                case JSON:
-//                    retVal = retVal + convertJSON2XML(line);
-//                    break;
-//                case XML:
-//                    retVal = retVal + convertXML2JSON(line);
-//                    break;
-//                default:
-//                    return "unknown format";
-//            }
-//
-//        } while (reader.ready());
-//
-//        return retVal;
-//}
 
-    //    public String convert(BufferedReader reader) {
-//
-//        DocType kind = detectDocType(line);
-//
-//        switch (kind) {
-//            case JSON:
-//                return convertJSON2XML(line);
-//            case XML:
-//                return convertXML2JSON(line);
-//        }
-//
-//        return "unknown format";
-//    }
     private boolean isSpacer(char ch) {
         return (ch == ' ' || ch == '\n');
     }
@@ -90,15 +59,6 @@ public class ConverterJSON2XML implements Converter {
         return term;
     }
 
-//    public char readSkipSpaces() throws IOException {
-//        char ch;
-//        do {
-//            ch = (char) reader.read();
-//        } while (isSpacer(ch));
-//        return ch;
-//
-//    }
-
     private Token readNextToken() throws IOException {
         skipSpaces();
         reader.mark(1);
@@ -136,34 +96,6 @@ public class ConverterJSON2XML implements Converter {
         }
         return tk == expectedToken;
     }
-
-//    private String convertJSON2XML(String docContent) {
-
-
-    //        Pattern pat;
-//        Matcher m;
-
-//        pat = Pattern.compile("\\{\"(.*)\"\\s*:\\s*\"(.*)\"\\}");
-//        m = pat.matcher(docContent);
-//        if (m.find()) {
-//            StringBuilder sb = new StringBuilder();
-//            sb.
-//                    append("<").append(m.group(1)).append(">").
-//                    append(m.group(2)).
-//                    append("</").append(m.group(1)).append(">");
-//            return sb.toString();
-//        }
-//
-//        pat = Pattern.compile("\\{\"(.*)\"\\s*:\\s*null}");
-//        m = pat.matcher(docContent);
-//        if (m.find()) {
-//            StringBuilder sb = new StringBuilder();
-//            sb.
-//                    append("<").append(m.group(1)).append("/>");
-//            return sb.toString();
-//        }
-//        return null;
-//    }
 
     public void appendElement(XMLElem xmlEl) {
         sb.append("<").append(xmlEl.name);

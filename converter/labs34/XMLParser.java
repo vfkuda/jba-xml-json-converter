@@ -1,10 +1,8 @@
-package converter;
+package converter.labs34;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class XMLParser {
     TokenReader reader;
@@ -55,18 +53,16 @@ public class XMLParser {
         return terms.poll();
     }
 
-    public XMLElement readElement(XMLElement parent) throws IOException {
+    public Element readElement(Element parent) throws IOException {
         skipExpected(Token.ELEMENT_OPEN_LESS);
         String name = nextTermToken();
-        XMLElement el = new XMLElement(name, parent);
+        Element el = new Element(name, parent);
         boolean betweenTags = false;
 
         while (true) {
             Token tk = nextToken();
             switch (tk) {
                 case ELEMENT_CLOSE_SLASH_MORE:
-//                    nextTermToken();
-//                    skipExpected(Token.ELEMENT_CLOSE_MORE);
                     return el;
                 case ELEMENT_CLOSE_MORE:
                     betweenTags = true;
@@ -80,14 +76,14 @@ public class XMLParser {
                     return el;
                 case ELEMENT_OPEN_LESS:
                     reader.unread('<');
-                    XMLElement child = readElement(el);
+                    Element child = readElement(el);
                     el.children.add(child);
                     break;
                 case TERM:
                 case TERM_QUOTED:
                     if (betweenTags) {
                         reader.unread(terms.poll());
-                        el.body = reader.readUntill('<');
+                        el.body = reader.readWhile('<');
                     }
                     break;
             }
@@ -101,7 +97,7 @@ public class XMLParser {
         }
     }
 
-    public XMLElement parse() throws IOException {
+    public Element parse() throws IOException {
         return readElement(null);
     }
 
@@ -110,40 +106,5 @@ public class XMLParser {
         ELEMENT_CLOSE_MORE, ELEMENT_CLOSE_SLASH_MORE, TERM, TERM_QUOTED, SIGN_EQU
 
     }
-
-    class XMLElement {
-        String name;
-        Map<String, String> attrs = new LinkedHashMap<>();
-        String body;
-        XMLElement parent = null;
-        List<XMLElement> children = new ArrayList<>();
-
-        public XMLElement(String elName, XMLElement parent) {
-            this.name = elName;
-            this.parent = parent;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void traverse(Consumer<XMLElement> consumer) {
-            consumer.accept(this);
-            for (XMLElement el : children) {
-                el.traverse(consumer);
-            }
-        }
-
-        public List<XMLElement> getUpNodes() {
-            LinkedList<XMLElement> path = new LinkedList<>();
-            XMLElement node = this;
-            do {
-                path.addFirst(node);
-                node = node.parent;
-            } while (node != null);
-            return path;
-        }
-    }
-
 
 }

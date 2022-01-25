@@ -1,4 +1,4 @@
-package converter;
+package converter.labs34;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,18 +7,18 @@ import java.io.InputStreamReader;
 import java.util.function.Predicate;
 
 public class TokenReader {
-    final int BUF_SIZE = 64;
-    final int BUF_CENTER = BUF_SIZE / 2;
-    int bufferPointer = BUF_CENTER;
-    int bufferEnd = BUF_CENTER;
-    BufferedReader reader;
-    char[] extraBuf = new char[BUF_SIZE];
+    private final int BUF_SIZE = 64;
+    private final int BUF_CENTER = BUF_SIZE / 2;
+    private int bufferPointer = BUF_CENTER;
+    private int bufferEnd = BUF_CENTER;
+    private final BufferedReader reader;
+    private final char[] extraBuf = new char[BUF_SIZE];
 
     public TokenReader(InputStream is) {
         this.reader = new BufferedReader(new InputStreamReader(is));
     }
 
-    public void skipUntill(Predicate<Character> p) throws IOException {
+    public void skipWhile(Predicate<Character> p) throws IOException {
         char ch;
         do {
             ch = read();
@@ -26,7 +26,7 @@ public class TokenReader {
         unread(ch);
     }
 
-    public String readUntill(Predicate<Character> p) throws IOException {
+    public String readWhile(Predicate<Character> p) throws IOException {
         StringBuilder sb = new StringBuilder();
         char ch;
         do {
@@ -39,7 +39,7 @@ public class TokenReader {
     }
 
     public void skipSpaces() throws IOException {
-        skipUntill(ch -> (ch == ' ' || ch == '\n'));
+        skipWhile(Character::isWhitespace);
     }
 
     public char lookAhead() throws IOException {
@@ -64,17 +64,16 @@ public class TokenReader {
     }
 
     public String readAlfaNumeric() throws IOException {
-        return readUntill(ch -> (Character.isLetterOrDigit(ch)));
+        return readWhile(Character::isLetterOrDigit);
     }
 
-
-    public String readUntill(char tillChar) throws IOException {
-        return readUntill(ch -> ch != tillChar);
+    public String readWhile(char tillChar) throws IOException {
+        return readWhile(ch -> ch != tillChar);
     }
 
     public String readQuoted() throws IOException {
         read();
-        String retVal = readUntill('\"');
+        String retVal = readWhile('\"');
         read();
         return retVal;
     }

@@ -1,5 +1,11 @@
 package converter;
 
+import converter.labs12.ConverterApp;
+import converter.labs34.DefaultPrinterConsumer;
+import converter.labs34.Element;
+import converter.labs34.AlaJSONParser;
+import converter.labs34.XMLParser;
+
 import java.io.*;
 
 public class Main {
@@ -16,16 +22,16 @@ public class Main {
 
     public static void main(String[] args) {
 //        lab2();
-        lab3();
+//        lab3();
+        lab4();
     }
 
     private static void lab3() {
         XMLParser p = null;
         try {
-
             p = new XMLParser(new BufferedInputStream(new FileInputStream(new File("test.txt"))));
-            XMLParser.XMLElement root = p.parse();
-            root.traverse(new DefaultXMLPrinterConsumer());
+            Element root = p.parse();
+            root.traverse(new DefaultPrinterConsumer());
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -34,4 +40,23 @@ public class Main {
         }
 
     }
+
+    private static void lab4() {
+        AlaJSONParser p = null;
+        try {
+            p = new AlaJSONParser(new BufferedInputStream(new FileInputStream(new File("test.txt"))));
+//            Element root = p.parse();
+            Element root = p.parseWierdStructureWithAttribitesMagic();
+            for (Element el : root.getChildren()) {
+                el.traverse(new DefaultPrinterConsumer(true, true));
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
